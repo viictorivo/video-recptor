@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { OrdersController } from '../src/Presentation/orders/orders.controller';
-import { OrdersService } from '../src/Application/services/orders.service';
-import { OrdersDto } from '../src/Presentation/orders/dto/order.dto';
-import { OrderUpdateDto } from '../src/Presentation/orders/dto/order-update.dto';
+import { OrdersController } from '../src/Presentation/Videos/orders.controller';
+import { OrdersService } from '../src/Application/services/video.service';
+import { OrdersDto } from '../src/Presentation/Videos/dto/upload.dto';
+import { OrderUpdateDto } from '../src/Presentation/Videos/dto/video-update.dto';
 import { NotFoundException } from '@nestjs/common';
 import { AwsSqsService } from '../src/Application/services/sqs.service';
 import { ConfigService } from '@nestjs/config';

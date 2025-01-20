@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs';
-import { OrdersService } from './orders.service';
+import { VideosService } from './video.service';
 import { ConfigService } from '@nestjs/config';
 import { AwsSqsService } from './sqs.service';
 
@@ -17,7 +17,7 @@ export class SqsConsumerService implements OnModuleInit, OnModuleDestroy {
   private readonly AWS_SQS_QUEUE_URL_PAYMENT_OUTBOUND = this.configService.get<string>('AWS_SQS_QUEUE_URL_PAYMENT_OUTBOUND');
   private readonly AWS_SQS_QUEUE_URL_PAYMENT_PRODUCT = this.configService.get<string>('AWS_SQS_QUEUE_URL_PAYMENT_PRODUCT');
 
-  constructor(private ordersService: OrdersService, private readonly configService: ConfigService, private awsSqsService: AwsSqsService) {
+  constructor(private videosService: VideosService, private readonly configService: ConfigService, private awsSqsService: AwsSqsService) {
     this.sqsClient = new SQSClient({
       region: this.AWS_REGION,
       credentials: {
@@ -65,9 +65,9 @@ export class SqsConsumerService implements OnModuleInit, OnModuleDestroy {
   private async processMessage(messageBody: string): Promise<void> {
     const parseMessage = JSON.parse(messageBody)
 
-    this.ordersService.update(parseMessage)
+    this.videosService.update(parseMessage)
 
-    const updatedOrder = await this.ordersService.getById(parseMessage.orderID)
+    const updatedOrder = await this.videosService.getById(parseMessage.orderID)
 
     const queueUrl = this.AWS_SQS_QUEUE_URL_PAYMENT_PRODUCT
 
