@@ -5,12 +5,13 @@ import { CustomRepository } from '../../database/typeorm-ex.decorator';
 import { v4 as uuidv4 } from 'uuid';
 import { InternalServerErrorException } from '@nestjs/common';
 import { VideoUpdateDto } from '../../Presentation/Videos/dto/updateVideo.dto';
-
-
+import { FileUploadService } from '../../Application/services/s3.service';
 
 @CustomRepository(Video)
 export class VideosRepository extends Repository<Video>  {
-    
+
+  private fileUploadService: FileUploadService
+
   async handleUpload(uploadVideoDto: UploadVideoDto): Promise<string> {
 
     const {userId, video: videoFile } = uploadVideoDto
@@ -25,7 +26,8 @@ export class VideosRepository extends Repository<Video>  {
 
     try {
       await upload.save();
-      return "Video salvo com sucesso";
+      await this.fileUploadService.saveFileToS3( userId, fileBase64 );
+      return upload.videoID;
     } catch (error) {
       throw new InternalServerErrorException(
           'Erro salvar video',

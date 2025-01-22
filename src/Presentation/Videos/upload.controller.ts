@@ -15,10 +15,19 @@ import {
   import { UploadVideoDto } from './dto/upload.dto';
   import { VideoUpdateDto } from './dto/updateVideo.dto';
   import { VideoService } from '../../Application/services/video.service';
-  
+  import { AwsSqsService } from '../../Application/services/sqs.service';
+  import { ConfigService } from '@nestjs/config';
+  import { SNSService } from '../../Application/services/sns.service';
+
   @Controller('upload')
   export class UploadController {
-    constructor(private readonly videoService: VideoService) {}
+
+    private readonly AWS_SQS_QUEUE_URL_PAYMENT_INBOUND = this.configService.get<string>('AWS_SQS_QUEUE_URL_PAYMENT_INBOUND');
+    
+    constructor(private readonly videoService: VideoService, 
+                private awsSqsService: AwsSqsService,
+                private readonly configService: ConfigService,
+                private snsService: SNSService) {}
   
     @Post()
     @UseInterceptors(FileInterceptor('video'))
@@ -29,16 +38,30 @@ import {
       if (!file) {
         throw new BadRequestException('No video file uploaded');
       }
+
+      try{
+        const queueUrl = this.AWS_SQS_QUEUE_URL_PAYMENT_INBOUND
   
-      // Garante que o arquivo de vídeo seja incluído no DTO
-      uploadVideoDto.video = file;
-  
-      const videoId = await this.videoService.uploadVideo(uploadVideoDto);
-  
-      return {
-        message: 'File uploaded successfully',
-        videoId,
-      };
+        // Garante que o arquivo de vídeo seja incluído no DTO
+        uploadVideoDto.video = file;
+    
+        const videoId = await this.videoService.uploadVideo(uploadVideoDto);
+    
+        await this.awsSqsService.sendMessage(queueUrl, videoId)
+    
+        return {
+          message: 'File uploaded successfully',
+          videoId,
+        };
+      } catch (err){
+        const message = "Erro ao fazer upload do video"
+        const subject = "Erro ao fazer upload do video"
+        await this.snsService.sendEmail(message, subject);
+
+        throw new NotFoundException(err?.message ?? 'Video not uploaded');
+      }
+
+
     }
 
     @Get()
@@ -57,7 +80,7 @@ import {
         const order = await this.videoService.update(dto);
         return order;
         } catch (err) {
-        throw new NotFoundException(err?.message ?? 'Order could not be updated');
+        throw new NotFoundException(err?.message ?? 'Video Status could not be updated');
         }
     }
 
@@ -67,7 +90,7 @@ import {
         await this.videoService.delete(String(id));
         return "Video deletado";
         } catch (err) {
-        throw new NotFoundException(err?.message ?? 'Order could not be deleted');
+        throw new NotFoundException(err?.message ?? 'Video could not be deleted');
         }
     }
   }
