@@ -12,7 +12,10 @@ export class Video extends BaseEntity {
   @Column()
   fileBase64: string;
 
-  @Column({ default: 'pending' }) 
+  @Column()
+  zipURL: string;
+
+  @Column({ default: 'pending' })
   status: string;
 
   @CreateDateColumn()
@@ -24,4 +27,3 @@ export class Video extends BaseEntity {
 
 
 
-  
