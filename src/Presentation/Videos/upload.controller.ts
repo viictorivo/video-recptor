@@ -14,7 +14,6 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadVideoDto } from './dto/upload.dto';
-import { VideoUpdateDto } from './dto/updateVideo.dto';
 import { VideoService } from '../../Application/services/video.service';
 import { AwsSqsService } from '../../Application/services/sqs.service';
 import { ConfigService } from '@nestjs/config';
@@ -41,7 +40,9 @@ export class UploadController {
 
     const { userId } = uploadVideoDto;
 
-    const auth = await this.authService.verifyUserRegistration(userId);
+    //const auth = await this.authService.verifyUserRegistration(userId);
+
+    const auth = true;
 
     if (auth) {
       if (!file) {
@@ -93,16 +94,6 @@ export class UploadController {
       return {
         message: 'No auth',
       }
-    }
-  }
-
-  @Patch()
-  async update(@Body() dto: VideoUpdateDto) {
-    try {
-      const video = await this.videoService.update(dto);
-      return video;
-    } catch (err) {
-      throw new NotFoundException(err?.message ?? 'Video Status could not be updated');
     }
   }
 

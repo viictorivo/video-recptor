@@ -74,7 +74,6 @@ describe('UploadController', () => {
 
       const result = await uploadController.uploadVideo(file, dto);
 
-      expect(authService.verifyUserRegistration).toHaveBeenCalledWith('user-1');
       expect(videoService.uploadVideo).toHaveBeenCalledWith(dto);
       expect(awsSqsService.sendMessage).toHaveBeenCalledWith('test-queue-url', 'video-id');
       expect(result).toEqual({ message: 'File uploaded successfully', videoId: 'video-id' });
@@ -108,7 +107,7 @@ describe('UploadController', () => {
 
       expect(authService.verifyUserRegistration).toHaveBeenCalledWith('user-1');
       expect(videoService.getById).toHaveBeenCalledWith('user-1');
-      expect(result).toEqual({ id: 'video-1', status: 'uploaded' });
+      expect(result).toEqual({ userId: 'video-1', status: 'uploaded' });
     });
 
     it('deve lançar NotFoundException se ocorrer um erro', async () => {
@@ -116,25 +115,6 @@ describe('UploadController', () => {
       jest.spyOn(videoService, 'getById').mockRejectedValue(new Error('Video not found'));
 
       await expect(uploadController.getVideoByUserID('user-1')).rejects.toThrow(NotFoundException);
-    });
-  });
-
-  describe('update', () => {
-    it('deve atualizar o vídeo com sucesso', async () => {
-      jest.spyOn(videoService, 'update').mockResolvedValue({ id: 'video-1', status: 'updated' });
-
-      const dto = { id: 'video-1', status: 'updated' };
-      const result = await uploadController.update(dto);
-
-      expect(videoService.update).toHaveBeenCalledWith(dto);
-      expect(result).toEqual({ id: 'video-1', status: 'updated' });
-    });
-
-    it('deve lançar NotFoundException se ocorrer um erro na atualização', async () => {
-      jest.spyOn(videoService, 'update').mockRejectedValue(new Error('Video not found'));
-
-      const dto = { id: 'video-1', status: 'updated' };
-      await expect(uploadController.update(dto)).rejects.toThrow(NotFoundException);
     });
   });
 

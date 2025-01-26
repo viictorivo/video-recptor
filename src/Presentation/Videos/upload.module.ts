@@ -5,7 +5,9 @@ import { VideoService } from '../../Application/services/video.service';
 import { Video } from './upload.entity';
 import { AwsSqsService } from '../../Application/services/sqs.service'
 import { SNSService } from '../../Application/services/sns.service'
+import { AuthService } from '../../Application/services/authentication.service'
 import { VideosRepository } from '../../Domain/Repositories/video.repository';
+
 
 
 @Module({
@@ -16,6 +18,7 @@ import { VideosRepository } from '../../Domain/Repositories/video.repository';
     VideoService,
     AwsSqsService,
     SNSService,
+    AuthService,
   ],
 })
 export class UploadModule { }

@@ -1,29 +1,26 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
+import axios, { AxiosResponse } from 'axios';
 
 @Injectable()
 export class AuthService {
-  private readonly authEndpoint = 'https://api.exemplo.com/auth/verify';
+  private readonly USER_API_URL = 'https://api.exemplo.com/users'; // Substitua pela sua URL base da API
 
-  constructor(private readonly httpService: HttpService) {}
 
-  async verifyUserRegistration(userId: string): Promise<boolean> {
+  async verifyUserRegistration(userID: string): Promise<any> {
     try {
-      const response = await firstValueFrom(
-        this.httpService.get(`${this.authEndpoint}?userId=${userId}`)
-      );
 
-      if (response.data && response.data.isRegistered) {
-        return true;
-      } else {
-        return false;
-      }
+      const response: AxiosResponse = await axios.get(`${this.USER_API_URL}?userId=${userID}`);
+
+      return response.data;
     } catch (error) {
+
       throw new HttpException(
-        'Erro ao verificar cadastro do usuário',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        error.response?.data || 'Erro ao buscar os dados do usuário',
+        error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 }
+
+
+

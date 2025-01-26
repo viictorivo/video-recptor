@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for Application/services/sqs.service.ts</title>
+    <title>Code coverage report for Application/services/sns.service.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">Application/services</a> sqs.service.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">Application/services</a> sns.service.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">64.28% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>9/14</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">58.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/12</span>
+                <span class='fraction'>7/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -96,29 +96,17 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -127,43 +115,52 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
-import { Injectable, Logger } from '@nestjs/common';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import * as AWS from 'aws-sdk';
 import { ConfigService } from '@nestjs/config';
 &nbsp;
 @Injectable()
-export class AwsSqsService {
-  private sqsClient: SQSClient;
-  private readonly AWS_ACCESS_KEY_ID = this.configService.get&lt;string&gt;('AWS_ACCESS_KEY_ID');
-  private readonly AWS_SECRET_ACCESS_KEY = this.configService.get&lt;string&gt;('AWS_SECRET_ACCESS_KEY');
-  private readonly AWS_REGION = this.configService.get&lt;string&gt;('AWS_REGION');
-  private readonly AWS_SESSION_TOKEN = this.configService.get&lt;string&gt;('AWS_SESSION_TOKEN');
+export class SNSService {
+  private readonly sns: AWS.SNS;
+  private readonly snsTopicArn: string;
 &nbsp;
   constructor(private readonly configService: ConfigService) {
-    this.sqsClient = new SQSClient({
-      region: this.AWS_REGION,
-      credentials: {
-        accessKeyId: this.AWS_ACCESS_KEY_ID,
-        secretAccessKey: this.AWS_SECRET_ACCESS_KEY,
-        sessionToken: this.AWS_SESSION_TOKEN
-&nbsp;
-      },
+    this.sns = new AWS.SNS({
+      accessKeyId: this.configService.get&lt;string&gt;('AWS_ACCESS_KEY_ID'),
+      secretAccessKey: this.configService.get&lt;string&gt;('AWS_SECRET_ACCESS_KEY'),
+      region: this.configService.get&lt;string&gt;('AWS_REGION'),
     });
-    
+    this.snsTopicArn = this.configService.get&lt;string&gt;('AWS_SNS_TOPIC_ARN');
   }
 &nbsp;
-  async sendMessage( queueUrl: string, message: any,) {
-    const params = {
-      DelaySeconds: 10,
-      MessageBody: JSON.stringify(message),
-      QueueUrl: queueUrl,
-    };
+<span class="fstat-no" title="function not covered" >  async </span>sendEmail(subject: string, message: string): Promise&lt;AWS.SNS.PublishResponse&gt; {
+<span class="cstat-no" title="statement not covered" >    try {</span>
+      const params: AWS.SNS.PublishInput = <span class="cstat-no" title="statement not covered" >{</span>
+        Message: message,
+        Subject: subject,
+        TopicArn: this.snsTopicArn,
+      };
 &nbsp;
-    await this.sqsClient.send(new SendMessageCommand(params));
+      const response = <span class="cstat-no" title="statement not covered" >await this.sns.publish(params).promise();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return response;</span>
+    } catch (error) {
+<span class="cstat-no" title="statement not covered" >      throw new HttpException('Erro ao enviar e-mail via SNS', HttpStatus.INTERNAL_SERVER_ERROR);</span>
+    }
   }
 }</pre></td></tr></table></pre>
 

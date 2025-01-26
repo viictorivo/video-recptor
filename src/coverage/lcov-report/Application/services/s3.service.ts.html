@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for Application/services/sqs.service.ts</title>
+    <title>Code coverage report for Application/services/s3.service.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">Application/services</a> sqs.service.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">Application/services</a> s3.service.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>9/15</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">53.84% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/12</span>
+                <span class='fraction'>7/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -97,28 +97,20 @@
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -127,43 +119,60 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
-import { Injectable, Logger } from '@nestjs/common';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import * as AWS from 'aws-sdk';
 import { ConfigService } from '@nestjs/config';
 &nbsp;
 @Injectable()
-export class AwsSqsService {
-  private sqsClient: SQSClient;
-  private readonly AWS_ACCESS_KEY_ID = this.configService.get&lt;string&gt;('AWS_ACCESS_KEY_ID');
-  private readonly AWS_SECRET_ACCESS_KEY = this.configService.get&lt;string&gt;('AWS_SECRET_ACCESS_KEY');
-  private readonly AWS_REGION = this.configService.get&lt;string&gt;('AWS_REGION');
-  private readonly AWS_SESSION_TOKEN = this.configService.get&lt;string&gt;('AWS_SESSION_TOKEN');
+export class FileUploadService {
+  private readonly s3: AWS.S3;
+  private readonly bucketName: string;
 &nbsp;
   constructor(private readonly configService: ConfigService) {
-    this.sqsClient = new SQSClient({
-      region: this.AWS_REGION,
-      credentials: {
-        accessKeyId: this.AWS_ACCESS_KEY_ID,
-        secretAccessKey: this.AWS_SECRET_ACCESS_KEY,
-        sessionToken: this.AWS_SESSION_TOKEN
-&nbsp;
-      },
+    this.s3 = new AWS.S3({
+      accessKeyId: this.configService.get&lt;string&gt;('AWS_ACCESS_KEY_ID'),
+      secretAccessKey: this.configService.get&lt;string&gt;('AWS_SECRET_ACCESS_KEY'),
+      region: this.configService.get&lt;string&gt;('AWS_REGION'),
     });
-    
+    this.bucketName = this.configService.get&lt;string&gt;('AWS_S3_BUCKET_NAME');
   }
 &nbsp;
-  async sendMessage( queueUrl: string, message: any,) {
-    const params = {
-      DelaySeconds: 10,
-      MessageBody: JSON.stringify(message),
-      QueueUrl: queueUrl,
-    };
+<span class="fstat-no" title="function not covered" >  async </span>saveFileToS3(base64Content: string, fileName: string): Promise&lt;string&gt; {
+<span class="cstat-no" title="statement not covered" >    try {</span>
+ 
+      const buffer = <span class="cstat-no" title="statement not covered" >Buffer.from(base64Content, 'base64');</span>
 &nbsp;
-    await this.sqsClient.send(new SendMessageCommand(params));
+      const params: AWS.S3.PutObjectRequest = <span class="cstat-no" title="statement not covered" >{</span>
+        Bucket: this.bucketName,
+        Key: fileName,
+        Body: buffer,
+        ContentType: 'application/octet-stream',
+      };
+&nbsp;
+      const uploadResponse = <span class="cstat-no" title="statement not covered" >await this.s3.upload(params).promise();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return uploadResponse.Location;</span>
+    } catch (error) {
+<span class="cstat-no" title="statement not covered" >      throw new HttpException('Erro ao salvar o arquivo no S3', HttpStatus.INTERNAL_SERVER_ERROR);</span>
+    }
   }
 }</pre></td></tr></table></pre>
 
