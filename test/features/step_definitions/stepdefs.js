@@ -1,45 +1,18 @@
 const assert = require('assert');
 const { Given, When, Then } = require('@cucumber/cucumber');
 
-function createOrder(order) {
-    return 'is created'
+function uploadVideo(video) {
+    return 'is send'
   }
 
-Given('I choose the products', function () {
-    this.products = {
-        "customerID": 2,
-        "customer": "Victor",
-        "amount": 31,
-        "orderItens": [
-            {
-                "name": "sorvete misto",
-                "quantity": 1,
-                "priceUnit": 3,
-                "productID": 2
-            },
-            {
-                "name": "x-burguer",
-                "quantity": 1,
-                "priceUnit": 20,
-                "productID": 5
-            },
-            {
-                "name": "Coca-cola",
-                "quantity": 1,
-                "priceUnit": 8,
-                "productID": 4
-            }
-    
-        ],
-        "orderTracking": [],
-        "payments": ""
-    }
+Given('I send the video', function () {
+    this.video = "file"
   });
 
-When('I click creater order', function () {
-    this.order = createOrder(this.products)
+When('I click send video', function () {
+    this.order = uploadVideo(this.video)
   });
 
-Then('My order {string}', function (orderCreated) {
-    assert.strictEqual(this.order, orderCreated);
+Then('My video {string}', function (videoUploaded) {
+    assert.strictEqual(this.video, videoUploaded);
   });
