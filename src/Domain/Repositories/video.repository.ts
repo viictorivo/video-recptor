@@ -5,11 +5,15 @@ import { CustomRepository } from '../../database/typeorm-ex.decorator';
 import { v4 as uuidv4 } from 'uuid';
 import { InternalServerErrorException } from '@nestjs/common';
 import { FileUploadService } from '../../Application/services/s3.service';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @CustomRepository(Video)
 export class VideosRepository extends Repository<Video>  {
 
-  private fileUploadService: FileUploadService
+  constructor(@InjectRepository(Video) private readonly videoRepo: Repository<Video>,
+    private readonly fileUploadService: FileUploadService) {
+    super(videoRepo.target, videoRepo.manager, videoRepo.queryRunner);
+  }
 
   async handleUpload(uploadVideoDto: UploadVideoDto): Promise<string> {
 
@@ -18,14 +22,15 @@ export class VideosRepository extends Repository<Video>  {
     const fileBase64 = videoFile.buffer.toString('base64');
 
     let upload = new Video()
-    upload.videoID = uuidv4(),
-      upload.userId = userId
+    upload.videoID = uuidv4()
+    upload.userId = userId
     upload.fileBase64 = fileBase64
     upload.status = 'pending'
 
     try {
+      await this.fileUploadService.saveFileToS3(fileBase64, upload.videoID);
+
       await upload.save();
-      await this.fileUploadService.saveFileToS3(userId, fileBase64);
       return upload.videoID;
     } catch (error) {
       throw new InternalServerErrorException(
@@ -37,10 +42,9 @@ export class VideosRepository extends Repository<Video>  {
   async getVideoById(id: string): Promise<any> {
 
     try {
-      const video = await Video.findOne({ where: { videoID: id } });
+      const video = await this.videoRepo.find({ where: { userId: id } });
       return video
     } catch (error) {
-      console.log(error)
       throw new InternalServerErrorException(
         'Erro ao consultar status no banco de dados',
       );
@@ -51,10 +55,9 @@ export class VideosRepository extends Repository<Video>  {
   async deleteVideo(id: string): Promise<any> {
     try {
       const videoID = await this.getVideoById(id);
-      await Video.remove(videoID);
+      await this.videoRepo.remove(videoID);
       return "Video deletado"
     } catch (error) {
-      console.log(error)
       throw new InternalServerErrorException(
         'Erro ao deletar video do banco de dados',
       );

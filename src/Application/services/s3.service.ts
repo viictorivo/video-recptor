@@ -7,18 +7,26 @@ export class FileUploadService {
   private readonly s3: AWS.S3;
   private readonly bucketName: string;
 
+  private readonly AWS_ACCESS_KEY_ID = this.configService.get<string>('AWS_ACCESS_KEY_ID');
+  private readonly AWS_SECRET_ACCESS_KEY = this.configService.get<string>('AWS_SECRET_ACCESS_KEY');
+  private readonly AWS_REGION = this.configService.get<string>('AWS_REGION');
+  private readonly AWS_SESSION_TOKEN = this.configService.get<string>('AWS_SESSION_TOKEN');
+
   constructor(private readonly configService: ConfigService) {
     this.s3 = new AWS.S3({
-      accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY_ID'),
-      secretAccessKey: this.configService.get<string>('AWS_SECRET_ACCESS_KEY'),
-      region: this.configService.get<string>('AWS_REGION'),
+      region: this.AWS_REGION,
+      credentials: {
+        accessKeyId: this.AWS_ACCESS_KEY_ID,
+        secretAccessKey: this.AWS_SECRET_ACCESS_KEY,
+        sessionToken: this.AWS_SESSION_TOKEN
+      },
     });
     this.bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');
   }
 
   async saveFileToS3(base64Content: string, fileName: string): Promise<string> {
     try {
- 
+
       const buffer = Buffer.from(base64Content, 'base64');
 
       const params: AWS.S3.PutObjectRequest = {
@@ -27,7 +35,7 @@ export class FileUploadService {
         Body: buffer,
         ContentType: 'application/octet-stream',
       };
-
+      
       const uploadResponse = await this.s3.upload(params).promise();
 
       return uploadResponse.Location;

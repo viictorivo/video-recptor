@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.66% </span>
+                <span class="strong">64.7% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>17/30</span>
+                <span class='fraction'>22/34</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/3</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">53.57% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/28</span>
+                <span class='fraction'>20/32</span>
             </div>
         
             
@@ -127,17 +127,24 @@
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -148,12 +155,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,20 +178,18 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -198,11 +204,15 @@ import { CustomRepository } from '../../database/typeorm-ex.decorator';
 import { v4 as uuidv4 } from 'uuid';
 import { InternalServerErrorException } from '@nestjs/common';
 import { FileUploadService } from '../../Application/services/s3.service';
+import { InjectRepository } from '@nestjs/typeorm';
 &nbsp;
 @CustomRepository(Video)
 export class VideosRepository extends Repository&lt;Video&gt;  {
 &nbsp;
-  private fileUploadService: FileUploadService
+  constructor(@InjectRepository(Video) private readonly videoRepo: Repository&lt;Video&gt;,
+    private readonly fileUploadService: FileUploadService) {
+    super(videoRepo.target, videoRepo.manager, videoRepo.queryRunner);
+  }
 &nbsp;
 <span class="fstat-no" title="function not covered" >  async </span>handleUpload(uploadVideoDto: UploadVideoDto): Promise&lt;string&gt; {
 &nbsp;
@@ -211,14 +221,15 @@ export class VideosRepository extends Repository&lt;Video&gt;  {
     const fileBase64 = <span class="cstat-no" title="statement not covered" >videoFile.buffer.toString('base64');</span>
 &nbsp;
     let upload = <span class="cstat-no" title="statement not covered" >new Video()</span>
-<span class="cstat-no" title="statement not covered" >    upload.videoID = uuidv4(),</span>
-      upload.userId = userId
+<span class="cstat-no" title="statement not covered" >    upload.videoID = uuidv4()</span>
+<span class="cstat-no" title="statement not covered" >    upload.userId = userId</span>
 <span class="cstat-no" title="statement not covered" >    upload.fileBase64 = fileBase64</span>
 <span class="cstat-no" title="statement not covered" >    upload.status = 'pending'</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    try {</span>
+<span class="cstat-no" title="statement not covered" >      await this.fileUploadService.saveFileToS3(fileBase64, upload.videoID);</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      await upload.save();</span>
-<span class="cstat-no" title="statement not covered" >      await this.fileUploadService.saveFileToS3(userId, fileBase64);</span>
 <span class="cstat-no" title="statement not covered" >      return upload.videoID;</span>
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      throw new InternalServerErrorException(</span>
@@ -230,10 +241,9 @@ export class VideosRepository extends Repository&lt;Video&gt;  {
   async getVideoById(id: string): Promise&lt;any&gt; {
 &nbsp;
     try {
-      const video = await Video.findOne({ where: { videoID: id } });
+      const video = await this.videoRepo.find({ where: { userId: id } });
       return video
     } catch (error) {
-      console.log(error)
       throw new InternalServerErrorException(
         'Erro ao consultar status no banco de dados',
       );
@@ -244,10 +254,9 @@ export class VideosRepository extends Repository&lt;Video&gt;  {
   async deleteVideo(id: string): Promise&lt;any&gt; {
     try {
       const videoID = await this.getVideoById(id);
-<span class="cstat-no" title="statement not covered" >      await Video.remove(videoID);</span>
-<span class="cstat-no" title="statement not covered" >      return "Video deletado"</span>
+      await this.videoRepo.remove(videoID);
+      return "Video deletado"
     } catch (error) {
-      console.log(error)
       throw new InternalServerErrorException(
         'Erro ao deletar video do banco de dados',
       );
@@ -262,7 +271,7 @@ export class VideosRepository extends Repository&lt;Video&gt;  {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-28T22:32:56.684Z
+                at 2025-02-01T19:13:37.935Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

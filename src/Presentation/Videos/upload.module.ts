@@ -7,6 +7,7 @@ import { AwsSqsService } from '../../Application/services/sqs.service'
 import { SNSService } from '../../Application/services/sns.service'
 import { AuthService } from '../../Application/services/authentication.service'
 import { VideosRepository } from '../../Domain/Repositories/video.repository';
+import { FileUploadService } from '../../Application/services/s3.service';
 
 
 
@@ -19,6 +20,7 @@ import { VideosRepository } from '../../Domain/Repositories/video.repository';
     AwsSqsService,
     SNSService,
     AuthService,
+    FileUploadService
   ],
 })
 export class UploadModule { }

@@ -13,7 +13,6 @@ export class AuthService {
 
       return response.data;
     } catch (error) {
-
       throw new HttpException(
         error.response?.data || 'Erro ao buscar os dados do usuário',
         error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,

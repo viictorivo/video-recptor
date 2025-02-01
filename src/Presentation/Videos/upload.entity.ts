@@ -6,14 +6,14 @@ export class Video extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   videoID: string;
 
-  @Column({ type: 'uuid' })
+  @Column()
   userId: string;
 
   @Column()
   fileBase64: string;
 
-  @Column()
-  zipURL: string;
+  @Column({ nullable: false, default: 'no url' })
+  zipURL?: string;
 
   @Column({ default: 'pending' })
   status: string;

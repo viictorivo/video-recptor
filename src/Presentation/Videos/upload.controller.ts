@@ -23,7 +23,7 @@ import { AuthService } from '../../Application/services/authentication.service';
 @Controller('upload')
 export class UploadController {
 
-  private readonly AWS_SQS_QUEUE_URL_PAYMENT_INBOUND = this.configService.get<string>('AWS_SQS_QUEUE_URL_PAYMENT_INBOUND');
+  private readonly AWS_SQS_QUEUE_URL_UPLOAD_VIDEO = this.configService.get<string>('AWS_SQS_QUEUE_URL_UPLOAD_VIDEO');
 
   constructor(private readonly videoService: VideoService,
     private awsSqsService: AwsSqsService,
@@ -42,15 +42,18 @@ export class UploadController {
 
     //const auth = await this.authService.verifyUserRegistration(userId);
 
-    const auth = true;
+    const auth = true
 
     if (auth) {
       if (!file) {
+        const message = "Erro ao fazer upload do video"
+        const subject = "Erro ao fazer upload do video"
+        await this.snsService.sendEmail(subject, message);
         throw new BadRequestException('No video file uploaded');
       }
 
       try {
-        const queueUrl = this.AWS_SQS_QUEUE_URL_PAYMENT_INBOUND
+        const queueUrl = this.AWS_SQS_QUEUE_URL_UPLOAD_VIDEO
 
         // Garante que o arquivo de vídeo seja incluído no DTO
         uploadVideoDto.video = file;
@@ -79,7 +82,7 @@ export class UploadController {
   }
 
   @Get()
-  async getVideoByUserID(@Param('userId') userId: string) {
+  async getVideoByUserID(@Query('userId') userId: string) {
 
     const auth = await this.authService.verifyUserRegistration(userId);
 
