@@ -2,13 +2,9 @@
 
 Projeto desenvolvido como trabalho final do curso Software Architecture da Pós-Tech Fiap 2024.
 
-## Sistema de autoatendimento de fast food
-
-Requisitos para o desenvolvimento do projeto
-
 **Projeto**
 
-Os clientes são apresentados a uma interface de seleção na qual podem optar por se identificarem via CPF, se cadastrarem com nome, e-mail ou não se identificar, podendo montar o combo na seguinte sequência, sendo todas elas opcionais: Lanche Acompanhamento Bebida Sobremesa Em cada etapa é exibido o nome, descrição e preço de cada produto.
+Sistema de processamento de imagens, onde ao usuário estar autenticado ele pode enviar um video e retorna as imagens dele em um arquivo .zip. Caso haja algum problema no processamento ele é informado que houve um erro via e-mail
 
 ## Link Video demonstração
 
@@ -22,19 +18,15 @@ Os clientes são apresentados a uma interface de seleção na qual podem optar p
 
 - **01. Buscar o pedido pelo ID**
 
-  > GET/orders/{order_id}
+  > GET/upload?user_id={user_id}
 
 - **02. Criar um pedido**
 
-  > POST/orders
-
-- **03. Atualização do pedido**
-
-  > PATCH/orders
+  > POST/upload
 
 - **04. Excluir um pedido**
 
-  > DELETE/orders/{order_id}
+  > DELETE/upload/{video_id}
 
 ## Cobertura do código
 

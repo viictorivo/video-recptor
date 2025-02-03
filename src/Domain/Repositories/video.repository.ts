@@ -28,7 +28,7 @@ export class VideosRepository extends Repository<Video>  {
     upload.status = 'pending'
 
     try {
-      await this.fileUploadService.saveFileToS3(fileBase64, upload.videoID);
+      await this.fileUploadService.saveFileToS3(videoFile, upload.videoID);
 
       await upload.save();
       return upload.videoID;

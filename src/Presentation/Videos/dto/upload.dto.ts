@@ -4,11 +4,17 @@ import { IsNotEmpty, IsUUID } from 'class-validator';
 export class UploadVideoDto {
   @ApiProperty({
     description: 'ID do usuário que está enviando o vídeo',
-    example: 'e4f50d8c-6e43-4e0d-a1dc-6ad3bfb2c5ab',
+    example: 'USERID',
   })
   @IsNotEmpty()
-  @IsUUID()
   userId: string;
+
+  @ApiProperty({
+    description: 'senha do usuário',
+    example: 'password',
+  })
+  @IsNotEmpty()
+  password: string;
 
   @ApiProperty({
     description: 'Arquivo de vídeo enviado pelo usuário',

@@ -32,6 +32,7 @@ describe('VideoService', () => {
         it('deve chamar o método handleUpload do repositório e retornar o videoID', async () => {
             const mockUploadDto: UploadVideoDto = {
                 userId: '12345',
+                password: 'password',
                 video: {
                     buffer: Buffer.from('fake-video-buffer'),
                     fieldname: 'video',

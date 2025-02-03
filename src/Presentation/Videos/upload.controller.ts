@@ -38,11 +38,9 @@ export class UploadController {
     @Body() uploadVideoDto: UploadVideoDto,
   ) {
 
-    const { userId } = uploadVideoDto;
+    const { userId, password } = uploadVideoDto;
 
-    //const auth = await this.authService.verifyUserRegistration(userId);
-
-    const auth = true
+    const auth = await this.authService.verifyUserRegistration(userId, password);
 
     if (auth) {
       if (!file) {
@@ -59,8 +57,9 @@ export class UploadController {
         uploadVideoDto.video = file;
 
         const videoId = await this.videoService.uploadVideo(uploadVideoDto);
+        const message = { "key": videoId }
 
-        await this.awsSqsService.sendMessage(queueUrl, videoId)
+        await this.awsSqsService.sendMessage(queueUrl, message)
 
         return {
           message: 'File uploaded successfully',
@@ -82,9 +81,9 @@ export class UploadController {
   }
 
   @Get()
-  async getVideoByUserID(@Query('userId') userId: string) {
+  async getVideoByUserID(@Query('userId') userId: string, @Query('password') password: string) {
 
-    const auth = await this.authService.verifyUserRegistration(userId);
+    const auth = await this.authService.verifyUserRegistration(userId, password);
 
     if (auth) {
       try {
@@ -101,9 +100,9 @@ export class UploadController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string, @Query('userID') userID: string) {
+  async delete(@Param('id') id: string, @Query('userID') userID: string, @Query('password') password: string) {
 
-    const auth = await this.authService.verifyUserRegistration(userID);
+    const auth = await this.authService.verifyUserRegistration(userID, password);
 
     if (auth) {
       try {

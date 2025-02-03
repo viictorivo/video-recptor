@@ -23,36 +23,39 @@ describe('AuthService', () => {
 
     it('should return user data when user is registered', async () => {
         const mockUserID = '123';
+        const mockUserPassword = 'password';
         const mockResponse = { data: { userId: '123', name: 'John Doe' } };
 
         // Mock do axios.get
         (axios.get as jest.Mock).mockResolvedValue(mockResponse);
 
-        const result = await authService.verifyUserRegistration(mockUserID);
+        const result = await authService.verifyUserRegistration(mockUserID, mockUserPassword);
 
         expect(result).toEqual(mockResponse.data);
     });
 
     it('should throw an HttpException if user registration fails', async () => {
         const mockUserID = '123';
+        const mockUserPassword = 'password';
         const mockErrorResponse = { response: { data: 'User not found', status: 404 } };
 
         // Mock do axios.get para retornar erro
         (axios.get as jest.Mock).mockRejectedValue(mockErrorResponse);
 
-        await expect(authService.verifyUserRegistration(mockUserID)).rejects.toThrowError(
+        await expect(authService.verifyUserRegistration(mockUserID, mockUserPassword)).rejects.toThrowError(
             new HttpException('User not found', 404),
         );
     });
 
     it('should throw an HttpException with default message if there is an unknown error', async () => {
         const mockUserID = '123';
+        const mockUserPassword = 'password';
         const mockErrorResponse = { response: null };
 
         // Mock do axios.get para retornar erro desconhecido
         (axios.get as jest.Mock).mockRejectedValue(mockErrorResponse);
 
-        await expect(authService.verifyUserRegistration(mockUserID)).rejects.toThrowError(
+        await expect(authService.verifyUserRegistration(mockUserID, mockUserPassword)).rejects.toThrowError(
             new HttpException('Erro ao buscar os dados do usuário', HttpStatus.INTERNAL_SERVER_ERROR),
         );
     });

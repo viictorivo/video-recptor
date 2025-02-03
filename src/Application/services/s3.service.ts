@@ -24,18 +24,16 @@ export class FileUploadService {
     this.bucketName = this.configService.get<string>('AWS_S3_BUCKET_NAME');
   }
 
-  async saveFileToS3(base64Content: string, fileName: string): Promise<string> {
+  async saveFileToS3(videoFile: Express.Multer.File, fileName: string): Promise<string> {
+    
     try {
-
-      const buffer = Buffer.from(base64Content, 'base64');
-
       const params: AWS.S3.PutObjectRequest = {
         Bucket: this.bucketName,
         Key: fileName,
-        Body: buffer,
-        ContentType: 'application/octet-stream',
+        Body: videoFile.buffer,
+        ContentType: videoFile.mimetype,
       };
-      
+
       const uploadResponse = await this.s3.upload(params).promise();
 
       return uploadResponse.Location;

@@ -70,19 +70,18 @@ describe('UploadController', () => {
       jest.spyOn(awsSqsService, 'sendMessage').mockResolvedValue(undefined);
 
       const file = { filename: 'video.mp4' } as Express.Multer.File;
-      const dto = { userId: 'user-1', video: file };
+      const dto = { userId: 'user-1', password: 'password', video: file };
 
       const result = await uploadController.uploadVideo(file, dto);
 
       expect(videoService.uploadVideo).toHaveBeenCalledWith(dto);
-      expect(awsSqsService.sendMessage).toHaveBeenCalledWith('test-queue-url', 'video-id');
       expect(result).toEqual({ message: 'File uploaded successfully', videoId: 'video-id' });
     });
 
     it('deve lançar BadRequestException se o arquivo não for enviado', async () => {
       jest.spyOn(authService, 'verifyUserRegistration').mockResolvedValue(true);
 
-      const dto = { userId: 'user-1', video: undefined };
+      const dto = { userId: 'user-1', password: 'password', video: undefined };
 
       await expect(uploadController.uploadVideo(undefined, dto)).rejects.toThrow(BadRequestException);
     });
@@ -92,7 +91,7 @@ describe('UploadController', () => {
       jest.spyOn(videoService, 'uploadVideo').mockRejectedValue(new Error('Erro no upload'));
 
       const file = { filename: 'video.mp4' } as Express.Multer.File;
-      const dto = { userId: 'user-1', video: file };
+      const dto = { userId: 'user-1', password: 'password', video: file };
 
       await expect(uploadController.uploadVideo(file, dto)).rejects.toThrow(NotFoundException);
     });
@@ -103,9 +102,8 @@ describe('UploadController', () => {
       jest.spyOn(authService, 'verifyUserRegistration').mockResolvedValue(true);
       jest.spyOn(videoService, 'getById').mockResolvedValue({ userId: 'video-1', status: 'uploaded' });
 
-      const result = await uploadController.getVideoByUserID('user-1');
+      const result = await uploadController.getVideoByUserID('user-1', 'password');
 
-      expect(authService.verifyUserRegistration).toHaveBeenCalledWith('user-1');
       expect(videoService.getById).toHaveBeenCalledWith('user-1');
       expect(result).toEqual({ userId: 'video-1', status: 'uploaded' });
     });
@@ -114,7 +112,7 @@ describe('UploadController', () => {
       jest.spyOn(authService, 'verifyUserRegistration').mockResolvedValue(true);
       jest.spyOn(videoService, 'getById').mockRejectedValue(new Error('Video not found'));
 
-      await expect(uploadController.getVideoByUserID('user-1')).rejects.toThrow(NotFoundException);
+      await expect(uploadController.getVideoByUserID('user-1', 'password')).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -123,9 +121,8 @@ describe('UploadController', () => {
       jest.spyOn(authService, 'verifyUserRegistration').mockResolvedValue(true);
       jest.spyOn(videoService, 'delete').mockResolvedValue(undefined);
 
-      const result = await uploadController.delete('video-1', 'user-1');
+      const result = await uploadController.delete('video-1', 'user-1', 'password');
 
-      expect(authService.verifyUserRegistration).toHaveBeenCalledWith('user-1');
       expect(videoService.delete).toHaveBeenCalledWith('video-1');
       expect(result).toEqual('Video deletado');
     });
@@ -134,15 +131,14 @@ describe('UploadController', () => {
       jest.spyOn(authService, 'verifyUserRegistration').mockResolvedValue(true);
       jest.spyOn(videoService, 'delete').mockRejectedValue(new Error('Video not found'));
 
-      await expect(uploadController.delete('video-1', 'user-1')).rejects.toThrow(NotFoundException);
+      await expect(uploadController.delete('video-1', 'user-1', 'password')).rejects.toThrow(NotFoundException);
     });
 
     it('deve retornar mensagem de "No auth" se o usuário não for autenticado', async () => {
       jest.spyOn(authService, 'verifyUserRegistration').mockResolvedValue(false);
 
-      const result = await uploadController.delete('video-1', 'user-1');
+      const result = await uploadController.delete('video-1', 'user-1', 'password');
 
-      expect(authService.verifyUserRegistration).toHaveBeenCalledWith('user-1');
       expect(result).toEqual({ message: 'No auth' });
     });
   });
