@@ -6,7 +6,7 @@ function uploadVideo(video) {
   }
 
 Given('I send the video', function () {
-    this.video = "file"
+    this.video = "is send"
   });
 
 When('I click send video', function () {
